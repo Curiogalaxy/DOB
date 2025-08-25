@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator | Find Your Exact Age</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --gray: #adb5bd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .ad-container {
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .ad-label {
+            background: var(--gray);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 5px;
+            text-align: center;
+        }
+        
+        .ad-space {
+            width: 100%;
+            min-height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f0f0f0;
+            color: #999;
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        .calculator-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="date"]:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .result.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .age-result {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+        
+        .result-details {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+        }
+        
+        .result-item {
+            text-align: center;
+        }
+        
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .ad-sidebar {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .ad-sidebar .ad-space {
+            min-height: 600px;
+        }
+        
+        .ad-in-content {
+            margin: 2rem 0;
+        }
+        
+        .ad-in-content .ad-space {
+            min-height: 250px;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-ad {
+            margin: 1rem 0;
+            width: 100%;
+            max-width: 728px;
+        }
+        
+        .footer-ad .ad-space {
+            min-height: 90px;
+        }
+        
+        /* Responsive design */
+        @media (min-width: 768px) {
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr 300px;
+                gap: 2rem;
+            }
+            
+            .ad-mobile {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            .header-ad {
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .ad-sidebar {
+                display: none;
+            }
+            
+            .result-details {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">AgeCalculator</div>
+                <div class="header-ad ad-container">
+                    <div class="ad-label">Advertisement</div>
+                    <div class="ad-space" id="header-ad">
+                        Google AdSense Banner (728x90)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="main-content">
+            <div class="content-area">
+                <div class="calculator-card">
+                    <h1>Calculate Your Exact Age</h1>
+                    
+                    <div class="input-group">
+                        <label for="dob">Enter Your Date of Birth</label>
+                        <input type="date" id="dob" max="2099-12-31">
+                    </div>
+                    
+                    <button id="calculate-btn">Calculate My Age</button>
+                    
+                    <div class="result" id="result">
+                        <h2>Your Age Is</h2>
+                        <div class="age-result" id="age-result">00 years</div>
+                        
+                        <div class="result-details">
+                            <div class="result-item">
+                                <div class="result-value" id="years">0</div>
+                                <div class="result-label">Years</div>
+                            </div>
+                            <div class="result-item">
+                                <div class="result-value" id="months">0</div>
+                                <div class="result-label">Months</div>
+                            </div>
+                            <div class="result-item">
+                                <div class="result-value" id="days">0</div>
+                                <div class="result-label">Days</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ad-in-content ad-container">
+                    <div class="ad-label">Advertisement</div>
+                    <div class="ad-space" id="in-content-ad">
+                        Google AdSense Rectangle (300x250)
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ad-sidebar ad-container">
+                <div class="ad-label">Advertisement</div>
+                <div class="ad-space" id="sidebar-ad">
+                    Google AdSense Skyscraper (160x600)
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2023 AgeCalculator. All rights reserved.</p>
+                
+                <div class="footer-ad ad-container">
+                    <div class="ad-label">Advertisement</div>
+                    <div class="ad-space" id="footer-ad">
+                        Google AdSense Banner (728x90)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateBtn = document.getElementById('calculate-btn');
+            const dobInput = document.getElementById('dob');
+            const resultDiv = document.getElementById('result');
+            const ageResult = document.getElementById('age-result');
+            const yearsEl = document.getElementById('years');
+            const monthsEl = document.getElementById('months');
+            const daysEl = document.getElementById('days');
+            
+            calculateBtn.addEventListener('click', function() {
+                const dob = new Date(dobInput.value);
+                const today = new Date();
+                
+                if (!dobInput.value) {
+                    alert('Please select your date of birth');
+                    return;
+                }
+                
+                if (dob > today) {
+                    alert('Date of birth cannot be in the future');
+                    return;
+                }
+                
+                // Calculate age
+                let years = today.getFullYear() - dob.getFullYear();
+                let months = today.getMonth() - dob.getMonth();
+                let days = today.getDate() - dob.getDate();
+                
+                if (days < 0) {
+                    months--;
+                    // Get days in the previous month
+                    const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                    days += lastMonth.getDate();
+                }
+                
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+                
+                // Update the UI with the calculated age
+                ageResult.textContent = `${years} years, ${months} months, ${days} days`;
+                yearsEl.textContent = years;
+                monthsEl.textContent = months;
+                daysEl.textContent = days;
+                
+                // Show the result
+                resultDiv.classList.add('active');
+            });
+            
+            // Set maximum date to today
+            const today = new Date();
+            const maxDate = today.toISOString().split('T')[0];
+            dobInput.setAttribute('max', maxDate);
+        });
+    </script>
+</body>
+</html>
