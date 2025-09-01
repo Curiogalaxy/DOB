@@ -13,6 +13,9 @@
             --dark: #212529;
             --success: #4cc9f0;
             --gray: #adb5bd;
+            --pregnancy-pink: #f8d7da;
+            --pregnancy-blue: #cce7ff;
+            --pregnancy-green: #d4edda;
         }
         
         * {
@@ -95,6 +98,40 @@
             text-align: center;
         }
         
+        h2 {
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .calculator-content {
+            display: none;
+        }
+        
+        .calculator-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
         .input-group {
             margin-bottom: 1.5rem;
         }
@@ -106,7 +143,7 @@
             color: var(--dark);
         }
         
-        input[type="date"] {
+        input[type="date"], input[type="number"], select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e2e8f0;
@@ -115,7 +152,7 @@
             transition: border-color 0.3s;
         }
         
-        input[type="date"]:focus {
+        input[type="date"]:focus, input[type="number"]:focus, select:focus {
             border-color: var(--primary);
             outline: none;
         }
@@ -152,11 +189,6 @@
             animation: fadeIn 0.5s;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
         .age-result {
             font-size: 2rem;
             font-weight: 700;
@@ -183,6 +215,31 @@
         .result-label {
             font-size: 0.9rem;
             color: var(--gray);
+        }
+        
+        .pregnancy-timeline {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: var(--pregnancy-blue);
+            border-radius: 8px;
+        }
+        
+        .timeline-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .timeline-week {
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-content {
+            color: var(--dark);
         }
         
         .ad-sidebar {
@@ -252,6 +309,11 @@
                 margin-top: 1rem;
             }
             
+            .tab-container {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
             .ad-sidebar {
                 display: none;
             }
@@ -261,13 +323,18 @@
                 gap: 1rem;
             }
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">Age Calculator</div>
+                <div class="logo">Health Calculators</div>
                 <div class="header-ad ad-container">
                     <div class="ad-label">Advertisement</div>
                     <div class="ad-space" id="header-ad">
@@ -282,31 +349,95 @@
         <div class="main-content">
             <div class="content-area">
                 <div class="calculator-card">
-                    <h1>Calculate Your Exact Age</h1>
-                    
-                    <div class="input-group">
-                        <label for="dob">Enter Your Date of Birth</label>
-                        <input type="date" id="dob" max="2099-12-31">
+                    <div class="tab-container">
+                        <div class="tab active" data-tab="age-calculator">Age Calculator</div>
+                        <div class="tab" data-tab="pregnancy-planner">Pregnancy Planner</div>
                     </div>
                     
-                    <button id="calculate-btn">Calculate My Age</button>
-                    
-                    <div class="result" id="result">
-                        <h2>Your Age Is</h2>
-                        <div class="age-result" id="age-result">00 years</div>
+                    <!-- Age Calculator -->
+                    <div class="calculator-content active" id="age-calculator">
+                        <h1>Calculate Your Exact Age</h1>
                         
-                        <div class="result-details">
-                            <div class="result-item">
-                                <div class="result-value" id="years">0</div>
-                                <div class="result-label">Years</div>
+                        <div class="input-group">
+                            <label for="dob">Enter Your Date of Birth</label>
+                            <input type="date" id="dob" max="2099-12-31">
+                        </div>
+                        
+                        <button id="calculate-btn">Calculate My Age</button>
+                        
+                        <div class="result" id="result">
+                            <h2>Your Age Is</h2>
+                            <div class="age-result" id="age-result">00 years</div>
+                            
+                            <div class="result-details">
+                                <div class="result-item">
+                                    <div class="result-value" id="years">0</div>
+                                    <div class="result-label">Years</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-value" id="months">0</div>
+                                    <div class="result-label">Months</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-value" id="days">0</div>
+                                    <div class="result-label">Days</div>
+                                </div>
                             </div>
-                            <div class="result-item">
-                                <div class="result-value" id="months">0</div>
-                                <div class="result-label">Months</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pregnancy Planner -->
+                    <div class="calculator-content" id="pregnancy-planner">
+                        <h1>Pregnancy Planning Calculator</h1>
+                        
+                        <div class="input-group">
+                            <label for="calculation-type">I want to calculate:</label>
+                            <select id="calculation-type">
+                                <option value="due-date">Due Date from Last Period</option>
+                                <option value="conception-date">Conception Date from Due Date</option>
+                                <option value="pregnancy-plan">Full Pregnancy Plan</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group" id="last-period-group">
+                            <label for="last-period">First Day of Last Menstrual Period</label>
+                            <input type="date" id="last-period">
+                        </div>
+                        
+                        <div class="input-group" id="due-date-group" style="display: none;">
+                            <label for="due-date">Estimated Due Date</label>
+                            <input type="date" id="due-date">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="cycle-length">Average Cycle Length (days)</label>
+                            <input type="number" id="cycle-length" value="28" min="21" max="35">
+                        </div>
+                        
+                        <button id="calculate-pregnancy">Calculate</button>
+                        
+                        <div class="result" id="pregnancy-result">
+                            <h2>Your Pregnancy Timeline</h2>
+                            <div class="age-result" id="pregnancy-summary"></div>
+                            
+                            <div class="result-details">
+                                <div class="result-item">
+                                    <div class="result-value" id="due-date-result">-</div>
+                                    <div class="result-label">Due Date</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-value" id="conception-date">-</div>
+                                    <div class="result-label">Conception Date</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-value" id="trimester">-</div>
+                                    <div class="result-label">Current Trimester</div>
+                                </div>
                             </div>
-                            <div class="result-item">
-                                <div class="result-value" id="days">0</div>
-                                <div class="result-label">Days</div>
+                            
+                            <div class="pregnancy-timeline" id="timeline">
+                                <h3>Pregnancy Timeline</h3>
+                                <div id="timeline-content"></div>
                             </div>
                         </div>
                     </div>
@@ -332,7 +463,7 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2023 AgeCalculator. All rights reserved.</p>
+                <p>&copy; 2023 HealthCalculators. All rights reserved.</p>
                 
                 <div class="footer-ad ad-container">
                     <div class="ad-label">Advertisement</div>
@@ -346,6 +477,29 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabs = document.querySelectorAll('.tab');
+            const calculatorContents = document.querySelectorAll('.calculator-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Show active content
+                    calculatorContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === tabId) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // Age Calculator functionality
             const calculateBtn = document.getElementById('calculate-btn');
             const dobInput = document.getElementById('dob');
             const resultDiv = document.getElementById('result');
@@ -395,10 +549,162 @@
                 resultDiv.classList.add('active');
             });
             
-            // Set maximum date to today
+            // Set maximum date to today for age calculator
             const today = new Date();
             const maxDate = today.toISOString().split('T')[0];
             dobInput.setAttribute('max', maxDate);
+            
+            // Pregnancy Calculator functionality
+            const calculationType = document.getElementById('calculation-type');
+            const lastPeriodGroup = document.getElementById('last-period-group');
+            const dueDateGroup = document.getElementById('due-date-group');
+            const lastPeriodInput = document.getElementById('last-period');
+            const dueDateInput = document.getElementById('due-date');
+            const cycleLengthInput = document.getElementById('cycle-length');
+            const calculatePregnancyBtn = document.getElementById('calculate-pregnancy');
+            const pregnancyResult = document.getElementById('pregnancy-result');
+            const pregnancySummary = document.getElementById('pregnancy-summary');
+            const dueDateResult = document.getElementById('due-date-result');
+            const conceptionDateResult = document.getElementById('conception-date');
+            const trimesterResult = document.getElementById('trimester');
+            const timelineContent = document.getElementById('timeline-content');
+            
+            // Update input fields based on calculation type
+            calculationType.addEventListener('change', function() {
+                if (this.value === 'due-date' || this.value === 'pregnancy-plan') {
+                    lastPeriodGroup.style.display = 'block';
+                    dueDateGroup.style.display = 'none';
+                } else {
+                    lastPeriodGroup.style.display = 'none';
+                    dueDateGroup.style.display = 'block';
+                }
+            });
+            
+            // Calculate pregnancy information
+            calculatePregnancyBtn.addEventListener('click', function() {
+                const type = calculationType.value;
+                let dueDate, conceptionDate, lastPeriod;
+                
+                if (type === 'due-date' || type === 'pregnancy-plan') {
+                    if (!lastPeriodInput.value) {
+                        alert('Please enter the first day of your last period');
+                        return;
+                    }
+                    
+                    lastPeriod = new Date(lastPeriodInput.value);
+                    dueDate = calculateDueDate(lastPeriod, parseInt(cycleLengthInput.value));
+                    conceptionDate = calculateConceptionDate(lastPeriod, parseInt(cycleLengthInput.value));
+                } else {
+                    if (!dueDateInput.value) {
+                        alert('Please enter your estimated due date');
+                        return;
+                    }
+                    
+                    dueDate = new Date(dueDateInput.value);
+                    conceptionDate = calculateConceptionFromDueDate(dueDate);
+                    lastPeriod = calculateLastPeriodFromDueDate(dueDate, parseInt(cycleLengthInput.value));
+                }
+                
+                // Update results
+                dueDateResult.textContent = formatDate(dueDate);
+                conceptionDateResult.textContent = formatDate(conceptionDate);
+                
+                // Calculate current trimester if applicable
+                const today = new Date();
+                if (today >= conceptionDate && today <= dueDate) {
+                    const weeksPregnant = Math.floor((today - conceptionDate) / (7 * 24 * 60 * 60 * 1000));
+                    if (weeksPregnant < 13) trimesterResult.textContent = 'First';
+                    else if (weeksPregnant < 27) trimesterResult.textContent = 'Second';
+                    else trimesterResult.textContent = 'Third';
+                    
+                    pregnancySummary.textContent = `You are approximately ${weeksPregnant} weeks pregnant`;
+                } else if (today < conceptionDate) {
+                    pregnancySummary.textContent = 'Pre-pregnancy planning phase';
+                    trimesterResult.textContent = 'Not yet pregnant';
+                } else {
+                    pregnancySummary.textContent = 'Pregnancy completed';
+                    trimesterResult.textContent = 'Completed';
+                }
+                
+                // Generate timeline for full pregnancy plan
+                if (type === 'pregnancy-plan') {
+                    generateTimeline(lastPeriod, dueDate);
+                } else {
+                    document.getElementById('timeline').style.display = 'none';
+                }
+                
+                // Show results
+                pregnancyResult.classList.add('active');
+            });
+            
+            // Helper functions for pregnancy calculations
+            function calculateDueDate(lastPeriod, cycleLength) {
+                const dueDate = new Date(lastPeriod);
+                dueDate.setDate(dueDate.getDate() + 280 + (cycleLength - 28));
+                return dueDate;
+            }
+            
+            function calculateConceptionDate(lastPeriod, cycleLength) {
+                const conceptionDate = new Date(lastPeriod);
+                conceptionDate.setDate(conceptionDate.getDate() + 14 + (cycleLength - 28));
+                return conceptionDate;
+            }
+            
+            function calculateConceptionFromDueDate(dueDate) {
+                const conceptionDate = new Date(dueDate);
+                conceptionDate.setDate(conceptionDate.getDate() - 266);
+                return conceptionDate;
+            }
+            
+            function calculateLastPeriodFromDueDate(dueDate, cycleLength) {
+                const lastPeriod = new Date(dueDate);
+                lastPeriod.setDate(lastPeriod.getDate() - 280 - (cycleLength - 28));
+                return lastPeriod;
+            }
+            
+            function formatDate(date) {
+                return date.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            }
+            
+            function generateTimeline(startDate, endDate) {
+                document.getElementById('timeline').style.display = 'block';
+                timelineContent.innerHTML = '';
+                
+                const milestones = [
+                    { week: 4, title: "Missed Period", description: "Your period is late, and you might consider taking a pregnancy test." },
+                    { week: 6, title: "First Prenatal Visit", description: "Schedule your first prenatal appointment with your healthcare provider." },
+                    { week: 8, title: "Baby's Heartbeat", description: "Your baby's heart begins to beat and may be detectable by ultrasound." },
+                    { week: 12, title: "End of First Trimester", description: "Risk of miscarriage decreases significantly. You may start sharing your news." },
+                    { week: 16, title: "Gender Reveal", description: "It may be possible to determine your baby's sex through ultrasound." },
+                    { week: 20, title: "Anatomy Scan", description: "A detailed ultrasound examines your baby's anatomy and development." },
+                    { week: 24, title: "Viability Milestone", description: "Your baby has a chance of survival if born prematurely." },
+                    { week: 28, title: "Third Trimester Begins", description: "Start of the final trimester. You'll have prenatal appointments every two weeks." },
+                    { week: 32, title: "Baby Positioning", description: "Your baby may settle into a head-down position in preparation for birth." },
+                    { week: 36, title: "Weekly Checkups", description: "You'll now have prenatal appointments every week until delivery." },
+                    { week: 40, title: "Due Date", description: "Your estimated due date arrives. Only 5% of babies are born on their exact due date." }
+                ];
+                
+                milestones.forEach(milestone => {
+                    const milestoneDate = new Date(startDate);
+                    milestoneDate.setDate(milestoneDate.getDate() + (milestone.week * 7));
+                    
+                    if (milestoneDate <= endDate) {
+                        const item = document.createElement('div');
+                        item.className = 'timeline-item';
+                        item.innerHTML = `
+                            <div class="timeline-week">Week ${milestone.week} - ${formatDate(milestoneDate)}</div>
+                            <div class="timeline-content">
+                                <strong>${milestone.title}:</strong> ${milestone.description}
+                            </div>
+                        `;
+                        timelineContent.appendChild(item);
+                    }
+                });
+            }
         });
     </script>
 </body>
