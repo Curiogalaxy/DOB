@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Age Calculator | Find Your Exact Age</title>
+    <title>Health Calculators | Age & Pregnancy Tools</title>
     <style>
         :root {
             --primary: #4361ee;
@@ -16,6 +16,7 @@
             --pregnancy-pink: #f8d7da;
             --pregnancy-blue: #cce7ff;
             --pregnancy-green: #d4edda;
+            --pregnancy-purple: #e2d9f3;
         }
         
         * {
@@ -101,6 +102,11 @@
         h2 {
             color: var(--primary);
             margin: 1.5rem 0 1rem;
+        }
+        
+        h3 {
+            color: var(--secondary);
+            margin: 1.2rem 0 0.8rem;
         }
         
         .tab-container {
@@ -240,6 +246,65 @@
         
         .timeline-content {
             color: var(--dark);
+        }
+        
+        .info-box {
+            background: var(--pregnancy-purple);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            display: none;
+        }
+        
+        .info-box.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .info-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .close-info {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .info-content {
+            line-height: 1.6;
+        }
+        
+        .info-content ul {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .info-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .learn-more {
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: inline-block;
         }
         
         .ad-sidebar {
@@ -416,6 +481,73 @@
                         
                         <button id="calculate-pregnancy">Calculate</button>
                         
+                        <!-- Information Boxes -->
+                        <div class="info-box" id="due-date-info">
+                            <div class="info-header">
+                                <div class="info-title">What is a Due Date?</div>
+                                <button class="close-info" onclick="hideInfo('due-date-info')">×</button>
+                            </div>
+                            <div class="info-content">
+                                <p>A due date, also known as the estimated date of delivery (EDD), is the predicted date when a pregnant woman is most likely to give birth.</p>
+                                <p><strong>How it's calculated:</strong></p>
+                                <ul>
+                                    <li>Typically calculated as 40 weeks from the first day of your last menstrual period (LMP)</li>
+                                    <li>This method assumes a 28-day cycle with ovulation on day 14</li>
+                                    <li>Only about 5% of babies are born exactly on their due date</li>
+                                    <li>Most births occur within two weeks before or after the due date</li>
+                                </ul>
+                                <p>Your healthcare provider may adjust your due date based on early ultrasound measurements.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box" id="conception-info">
+                            <div class="info-header">
+                                <div class="info-title">Understanding Conception Date</div>
+                                <button class="close-info" onclick="hideInfo('conception-info')">×</button>
+                            </div>
+                            <div class="info-content">
+                                <p>Conception date refers to when a sperm fertilizes an egg, leading to pregnancy. This typically occurs during ovulation when an egg is released from the ovary.</p>
+                                <p><strong>Key facts about conception:</strong></p>
+                                <ul>
+                                    <li>Conception usually occurs about 11-21 days after the first day of your last period</li>
+                                    <li>The exact date of conception is often difficult to determine</li>
+                                    <li>Pregnancy dating typically uses the last menstrual period rather than conception date</li>
+                                    <li>Sperm can live inside the female body for up to 5 days</li>
+                                    <li>An egg is viable for about 12-24 hours after ovulation</li>
+                                </ul>
+                                <p>If you know your due date, conception likely occurred approximately 38 weeks before that date.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box" id="pregnancy-plan-info">
+                            <div class="info-header">
+                                <div class="info-title">What is a Full Pregnancy Plan?</div>
+                                <button class="close-info" onclick="hideInfo('pregnancy-plan-info')">×</button>
+                            </div>
+                            <div class="info-content">
+                                <p>A full pregnancy plan helps you understand what to expect throughout your pregnancy journey, from early symptoms to delivery preparation.</p>
+                                <p><strong>What a pregnancy plan includes:</strong></p>
+                                <ul>
+                                    <li>Important milestones in fetal development</li>
+                                    <li>Recommended prenatal appointments and tests</li>
+                                    <li>Nutritional needs during each trimester</li>
+                                    <li>Common symptoms and how to manage them</li>
+                                    <li>Preparation for labor and delivery</li>
+                                    <li>Postpartum planning</li>
+                                </ul>
+                                <p><strong>Benefits of having a pregnancy plan:</strong></p>
+                                <ul>
+                                    <li>Helps you feel more prepared and in control</li>
+                                    <li>Ensures you don't miss important medical appointments</li>
+                                    <li>Provides guidance on healthy pregnancy practices</li>
+                                    <li>Helps you make informed decisions about your care</li>
+                                </ul>
+                                <p>Remember that every pregnancy is unique, and your plan should be flexible to accommodate changes.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="learn-more" id="learn-more-link">Learn more about these calculations</div>
+                        
                         <div class="result" id="pregnancy-result">
                             <h2>Your Pregnancy Timeline</h2>
                             <div class="age-result" id="pregnancy-summary"></div>
@@ -464,6 +596,7 @@
         <div class="container">
             <div class="footer-content">
                 <p>&copy; 2023 HealthCalculators. All rights reserved.</p>
+                <p><small>Note: This calculator provides estimates only. Always consult with healthcare professionals for medical advice.</small></p>
                 
                 <div class="footer-ad ad-container">
                     <div class="ad-label">Advertisement</div>
@@ -568,6 +701,7 @@
             const conceptionDateResult = document.getElementById('conception-date');
             const trimesterResult = document.getElementById('trimester');
             const timelineContent = document.getElementById('timeline-content');
+            const learnMoreLink = document.getElementById('learn-more-link');
             
             // Update input fields based on calculation type
             calculationType.addEventListener('change', function() {
@@ -577,6 +711,29 @@
                 } else {
                     lastPeriodGroup.style.display = 'none';
                     dueDateGroup.style.display = 'block';
+                }
+                
+                // Show relevant info box when calculation type changes
+                hideAllInfo();
+                if (this.value === 'due-date') {
+                    showInfo('due-date-info');
+                } else if (this.value === 'conception-date') {
+                    showInfo('conception-info');
+                } else if (this.value === 'pregnancy-plan') {
+                    showInfo('pregnancy-plan-info');
+                }
+            });
+            
+            // Learn more link functionality
+            learnMoreLink.addEventListener('click', function() {
+                hideAllInfo();
+                const type = calculationType.value;
+                if (type === 'due-date') {
+                    showInfo('due-date-info');
+                } else if (type === 'conception-date') {
+                    showInfo('conception-info');
+                } else if (type === 'pregnancy-plan') {
+                    showInfo('pregnancy-plan-info');
                 }
             });
             
@@ -705,6 +862,28 @@
                     }
                 });
             }
+            
+            // Information box functions
+            function showInfo(infoId) {
+                document.getElementById(infoId).classList.add('active');
+            }
+            
+            function hideInfo(infoId) {
+                document.getElementById(infoId).classList.remove('active');
+            }
+            
+            function hideAllInfo() {
+                const infoBoxes = document.querySelectorAll('.info-box');
+                infoBoxes.forEach(box => box.classList.remove('active'));
+            }
+            
+            // Show due date info by default when pregnancy planner is active
+            document.querySelector('.tab[data-tab="pregnancy-planner"]').addEventListener('click', function() {
+                setTimeout(function() {
+                    hideAllInfo();
+                    showInfo('due-date-info');
+                }, 100);
+            });
         });
     </script>
 </body>
